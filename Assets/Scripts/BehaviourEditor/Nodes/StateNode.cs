@@ -10,6 +10,9 @@ namespace SA.BehaviourEditor
 	{
 		bool collapse;
 		public State currentState;
+		State previousState;
+
+		List<BaseNode> childNodes = new List<BaseNode>();
 
 		public override void DrawWindow()
 		{
@@ -32,11 +35,39 @@ namespace SA.BehaviourEditor
 			}
 
 			currentState = (State)EditorGUILayout.ObjectField(currentState, typeof(State), false);
+
+			if (previousState != currentState)
+			{
+				previousState = currentState;
+				ClearReferences();
+
+				// Add references to the children
+				for (int i = 0; i < currentState.transitions.Count; i++)
+				{
+					childNodes.Add(BehaviourEditor.AddTransitionNode(i, currentState.transitions[i], this));
+				}
+			}
+
+			if (currentState)
+			{
+				// coming back
+			}
 		}
 
 		public override void DrawCurve()
 		{
 			base.DrawCurve();
+		}
+
+		public Transition AddTransition()
+		{
+			return currentState.AddTransition();
+		}
+
+		public void ClearReferences()
+		{
+			BehaviourEditor.ClearWindowsFromList(childNodes);
+			childNodes.Clear();
 		}
 	}
 }

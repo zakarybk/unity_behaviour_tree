@@ -11,3 +11,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2490b1f75dc11d46b141341ab151206, type: 3}
   m_Name: Normal
   m_EditorClassIdentifier: 
+  actions: []
+  onEnter: []
+  onExit: []
+  transitions:
+  - condition: {fileID: 0}
+    targetState: {fileID: 0}
+    disable: 0
+  - condition: {fileID: 0}
+    targetState: {fileID: 0}
+    disable: 0
