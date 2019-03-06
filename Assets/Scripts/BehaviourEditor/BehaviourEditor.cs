@@ -279,6 +279,9 @@ namespace SA.BehaviourEditor
 
 			windows.Add(transitionNode);
 
+			// Add the new child to the StateNode
+			from.childNodes.Add(transitionNode);
+
 			return transitionNode;
 
 		}

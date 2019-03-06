@@ -9,5 +9,16 @@ namespace SA
 		public float health;
 		public State currentState;
 
+		[HideInInspector]
+		public float delta;
+
+		private void Update()
+		{
+			if (currentState)
+			{
+				currentState.Tick(this);
+			}
+		}
+
 	}
 }
