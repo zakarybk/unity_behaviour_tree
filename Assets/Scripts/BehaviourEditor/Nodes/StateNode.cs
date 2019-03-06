@@ -12,7 +12,8 @@ namespace SA.BehaviourEditor
 {
 	public class StateNode : BaseNode
 	{
-		bool collapse;
+		public bool collapse;
+		bool previousCollapse;
 		public State currentState;
 		State previousState;
 
@@ -45,17 +46,22 @@ namespace SA.BehaviourEditor
 
 			currentState = (State)EditorGUILayout.ObjectField(currentState, typeof(State), false);
 
+			if (previousCollapse != collapse)
+			{
+				previousCollapse = collapse;
+				BehaviourEditor.graph.SetStateNode(this);
+			}
+
 			if (previousState != currentState)
 			{
 				serializedState = null;
-
 				previousState = currentState;
-				ClearReferences();
+				BehaviourEditor.graph.SetStateNode(this);
 
 				// Add references to the children
 				for (int i = 0; i < currentState.transitions.Count; i++)
 				{
-					childNodes.Add(BehaviourEditor.AddTransitionNode(i, currentState.transitions[i], this));
+
 				}
 			}
 
