@@ -26,7 +26,7 @@ namespace SA {
 			}
 			else if (node is TransitionNode)
 			{
-				//
+				SetTransitionNode((TransitionNode)node);
 			}
 			else if (node is CommentNode)
 			{
@@ -47,7 +47,7 @@ namespace SA {
 			return isDuplicate;
 		}
 
-		public void SetStateNode(StateNode node)
+		void SetStateNode(StateNode node)
 		{
 			if (node.isDuplicate)
 				return;
@@ -81,7 +81,7 @@ namespace SA {
 			stateDict.Add(saved.state, node);
 		}
 
-		public void ClearStateNode(StateNode node)
+		void ClearStateNode(StateNode node)
 		{
 			Saved_StateNode saved = GetSavedState(node);
 
@@ -109,6 +109,26 @@ namespace SA {
 			return r;
 		}
 
+		#region Transition Nodes
+
+		public bool IsTransitionDuplicate(TransitionNode node)
+		{
+			bool isDuplicate = false;
+
+			Saved_StateNode savedStateNode = GetSavedState(node.enterState);
+			isDuplicate = savedStateNode.IsTransitionDuplicate(node);
+
+			return isDuplicate;
+		}
+
+		void SetTransitionNode(TransitionNode node)
+		{
+			Saved_StateNode savedStateNode = GetSavedState(node.enterState);
+			savedStateNode.SetTransitionNode(node);
+		}
+
+		#endregion
+
 	}
 
 	[System.Serializable]
@@ -118,12 +138,88 @@ namespace SA {
 		public Vector2 position;
 		public bool isCollapsed;
 
+		public List<Saved_Conditions> savedConditions = new List<Saved_Conditions>();
+		Dictionary<TransitionNode, Saved_Conditions> savedTransitionsDict = new Dictionary<TransitionNode, Saved_Conditions>();
+		Dictionary<Condition, TransitionNode> conditionsDict = new Dictionary<Condition, TransitionNode>();
+
+		public void Init()
+		{
+			savedTransitionsDict.Clear();
+			conditionsDict.Clear();
+		}
+
+		public bool IsTransitionDuplicate(TransitionNode node)
+		{
+			bool isDuplicate = false;
+
+			// Make sure no other node contains the same state - return if true
+			TransitionNode previousNode = null;
+			conditionsDict.TryGetValue(node.targetCondition, out previousNode);
+			if (previousNode != null)
+				isDuplicate = true;
+
+			return isDuplicate;
+		}
+
+		public void SetTransitionNode(TransitionNode node)
+		{
+			// Don't add duplicates
+			if (node.isDuplicate)
+				return;
+
+			if (node.previousCondition != null)
+			{
+				conditionsDict.Remove(node.targetCondition);
+			}
+
+			// Don't add if target has no transition condition
+			if (node.targetCondition == null)
+			{
+				return;
+			}
+
+			// Load the saved condition
+			Saved_Conditions savedCondition = GetSavedCondition(node);
+			if (savedCondition == null)
+			{
+				savedCondition = new Saved_Conditions();
+				savedConditions.Add(savedCondition);
+				savedTransitionsDict.Add(node, savedCondition);
+				node.transition = node.enterState.currentState.AddTransition();
+			}
+
+			// Apply the saved condition and transition
+			savedCondition.transition = node.transition;
+			savedCondition.condition = node.targetCondition;
+			savedCondition.transition.condition = node.targetCondition;
+			savedCondition.position = new Vector2(node.windowRect.x, node.windowRect.y);
+			conditionsDict.Add(savedCondition.condition, node);
+		}
+
+
+		Saved_Conditions GetSavedCondition(TransitionNode node)
+		{
+			Saved_Conditions r = null;
+			savedTransitionsDict.TryGetValue(node, out r);
+			return r;
+		}
+
+
+		TransitionNode GetTransitionNode(Transition transition)
+		{
+			TransitionNode r = null;
+			conditionsDict.TryGetValue(transition.condition, out r);
+			return r;
+		}
+
 	}
 
 	[System.Serializable]
-	public class Saved_Transition
+	public class Saved_Conditions
 	{
-
+		public Transition transition;
+		public Condition condition;
+		public Vector2 position;
 	}
 }
 

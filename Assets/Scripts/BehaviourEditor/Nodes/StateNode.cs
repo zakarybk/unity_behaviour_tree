@@ -62,7 +62,7 @@ namespace SA.BehaviourEditor
 
 				if (!isDuplicate)
 				{
-					BehaviourEditor.graph.SetStateNode(this);
+					BehaviourEditor.graph.SetNode(this);
 					previousState = currentState;
 
 					// Add references to the children

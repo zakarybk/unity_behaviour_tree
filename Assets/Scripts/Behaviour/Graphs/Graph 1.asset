@@ -11,4 +11,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff52a64d66f8a3d4fba8f911140a7376, type: 3}
   m_Name: Graph 1
   m_EditorClassIdentifier: 
-  saved_StateNodes: []
+  saved_StateNodes:
+  - state: {fileID: 11400000, guid: f3f63620af7a1b0429b194eb3eb61ca5, type: 2}
+    position: {x: 296, y: 242}
+    isCollapsed: 0
+    savedConditions:
+    - transition:
+        condition: {fileID: 11400000, guid: f5f5419e30702704fbff48f43ecaa512, type: 2}
+        targetState: {fileID: 0}
+        disable: 0
+      condition: {fileID: 11400000, guid: f5f5419e30702704fbff48f43ecaa512, type: 2}
+      position: {x: 637, y: 152}

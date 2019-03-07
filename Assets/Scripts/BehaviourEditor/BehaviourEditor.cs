@@ -227,9 +227,9 @@ namespace SA.BehaviourEditor
 					if (selectedNode is StateNode)
 					{
 						StateNode from = (StateNode)selectedNode;
-						Transition transition = from.AddTransition();
+//						Transition transition = from.AddTransition();
 
-						AddTransitionNode(from.currentState.transitions.Count, transition, from);
+						AddTransitionNode(from.currentState.transitions.Count, null, from);
 					}
 					break;
 				case UserActions.removeNode:
@@ -246,10 +246,10 @@ namespace SA.BehaviourEditor
 						windows.Remove(target);
 
 						// Remove target reference from parent/enterState
-						if (target.enterState.currentState.transitions.Contains(target.targetTransition))
-						{
-							target.enterState.currentState.transitions.Remove(target.targetTransition);
-						}
+//						if (target.enterState.currentState.transitions.Contains(target.targetCondition))
+//						{
+//							target.enterState.currentState.transitions.Remove(target.targetCondition);
+//						}
 					}
 
 					else if (selectedNode is CommentNode)
@@ -412,7 +412,16 @@ namespace SA.BehaviourEditor
 				stateNode.currentState = saved_StateNodes[i].state;
 				stateNode.collapse = saved_StateNodes[i].isCollapsed;
 
-				graph.SetStateNode(stateNode);
+				for (int transitionIndex = saved_StateNodes[i].savedConditions.Count - 1; transitionIndex >= 0 ; transitionIndex--)
+				{
+					TransitionNode transitionNode = AddTransitionNode(
+						saved_StateNodes[i].savedConditions[transitionIndex].position,
+						saved_StateNodes[i].savedConditions[transitionIndex].transition,
+						stateNode
+					);
+
+					transitionNode.targetCondition = saved_StateNodes[i].savedConditions[transitionIndex].condition;
+				}
 
 				// Load transitions
 			}

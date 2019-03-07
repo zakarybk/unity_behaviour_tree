@@ -8,39 +8,55 @@ namespace SA.BehaviourEditor
 {
 	public class TransitionNode : BaseNode
 	{
-		public Transition targetTransition;
+		public bool isDuplicate;
+		public Condition targetCondition;
+		public Condition previousCondition;
+		public Transition transition;
+
 		public StateNode enterState;
 		public StateNode targetState;
 
 		public void Init(StateNode enterState, Transition transition)
 		{
 			this.enterState = enterState;
-			targetTransition = transition;
 		}
 
 		public override void DrawWindow()
 		{
-			if (targetTransition != null)
-			{
-				// Directly editing public var
-				// Setup the condition
-				targetTransition.condition = (Condition)EditorGUILayout.ObjectField(
-					targetTransition.condition,
-					typeof(Condition),
-					false
-				);
+			// Directly editing public var
+			// Setup the condition
+			targetCondition = (Condition)EditorGUILayout.ObjectField(
+				targetCondition,
+				typeof(Condition),
+				false
+			);
 
-				// No condition - warn the user
-				if (targetTransition.condition == null)
+			// No condition - warn the user
+			if (targetCondition == null)
+			{
+				EditorGUILayout.LabelField("No condition set!");
+			}
+			// Allow the user to enable/disable the transition
+			else
+			{
+				if (isDuplicate)
 				{
-					EditorGUILayout.LabelField("No condition set!");
+					EditorGUILayout.LabelField("Duplicate condition!");
 				}
-				// Allow the user to enable/disable the transition
 				else
 				{
-					targetTransition.disable = EditorGUILayout.Toggle("Disable", targetTransition.disable);
+//					transition.disable = EditorGUILayout.Toggle("Disable", transition.disable);
 				}
+			}
 
+			if (previousCondition != targetCondition)
+			{
+				isDuplicate = BehaviourEditor.graph.IsTransitionDuplicate(this);
+				if (!isDuplicate)
+				{
+					BehaviourEditor.graph.SetNode(this);
+				}
+				previousCondition = targetCondition;
 			}
 		}
 
