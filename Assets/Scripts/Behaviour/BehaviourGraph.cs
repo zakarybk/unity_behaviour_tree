@@ -34,8 +34,36 @@ namespace SA {
 			}
 		}
 
+		public bool IsStateNodeDuplicate(StateNode node)
+		{
+			bool isDuplicate = false;
+
+			// Make sure no other node contains the same state - return if true
+			StateNode previousNode = null;
+			stateDict.TryGetValue(node.currentState, out previousNode);
+			if (previousNode != null)
+				isDuplicate = true;
+
+			return isDuplicate;
+		}
+
 		public void SetStateNode(StateNode node)
 		{
+			if (node.isDuplicate)
+				return;
+
+			// Cleanup previous state
+			if (node.previousState != null)
+			{
+				stateDict.Remove(node.previousState);
+			}
+
+			// No state - pass/return
+			if (node.currentState == null)
+			{
+				return;
+			}
+
 			Saved_StateNode saved = GetSavedState(node);
 
 			// If no saved state node exists - create one
@@ -49,6 +77,8 @@ namespace SA {
 			saved.state = node.currentState;
 			saved.position = new Vector2(node.windowRect.x, node.windowRect.y);
 			saved.isCollapsed = node.collapse;
+
+			stateDict.Add(saved.state, node);
 		}
 
 		public void ClearStateNode(StateNode node)

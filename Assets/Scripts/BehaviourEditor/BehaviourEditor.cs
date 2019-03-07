@@ -298,7 +298,7 @@ namespace SA.BehaviourEditor
 			windows.Add(stateNode);
 
 			// Add to the graph
-			graph.SetStateNode(stateNode);
+//			graph.SetStateNode(stateNode);
 
 			return stateNode;
 		}
