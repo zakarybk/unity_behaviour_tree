@@ -10,106 +10,93 @@ using SA;
 
 namespace SA.BehaviourEditor
 {
-	public class StateNode : BaseNode
+	[CreateAssetMenu(menuName = "Editor/Nodes/State Node")]
+	public class StateNode : DrawNode
 	{
-		public bool collapse;
-		bool previousCollapse;
 
-		public bool isDuplicate;
-
-		public State currentState;
-		public State previousState;
-
-		SerializedObject serializedState;
-		ReorderableList onStateList;
-		ReorderableList onEnterList;
-		ReorderableList onExitList;
-
-		public List<BaseNode> childNodes = new List<BaseNode>();
-
-		public override void DrawWindow()
+		public override void DrawWindow(BaseNode baseNode)
 		{
-			if (currentState)
+			if (baseNode.stateRef.currentState)
 			{
-				if (collapse)
+				if (baseNode.stateRef.collapse)
 				{
-					windowRect.height = 100; // Magic number
+					baseNode.windowRect.height = 100; // Magic number
 				}
 				else
 				{
 					//windowRect.height = 300; // Magic number
 				}
 
-				collapse = EditorGUILayout.Toggle(" ", collapse);
+				baseNode.stateRef.collapse = EditorGUILayout.Toggle(" ", baseNode.stateRef.collapse);
 			}
 			else
 			{
 				EditorGUILayout.LabelField("Add state to modify:");
 			}
 
-			currentState = (State)EditorGUILayout.ObjectField(currentState, typeof(State), false);
+			baseNode.stateRef.currentState = (State)EditorGUILayout.ObjectField(baseNode.stateRef.currentState, typeof(State), false);
 
-			if (previousCollapse != collapse)
+			if (baseNode.stateRef.previousCollapse != baseNode.stateRef.collapse)
 			{
-				previousCollapse = collapse;
+				baseNode.stateRef.previousCollapse = baseNode.stateRef.collapse;
 //				BehaviourEditor.graph.SetStateNode(this);
 			}
 
-			if (previousState != currentState)
+			if (baseNode.stateRef.previousState != baseNode.stateRef.currentState)
 			{
-				serializedState = null;
-				isDuplicate = BehaviourEditor.graph.IsStateNodeDuplicate(this);
+				baseNode.stateRef.serializedState = null;
+				baseNode.stateRef.isDuplicate = BehaviourEditor.settings.graph.IsStateNodeDuplicate(this);
 
-				if (!isDuplicate)
+				if (!baseNode.stateRef.isDuplicate)
 				{
-					BehaviourEditor.graph.SetNode(this);
-					previousState = currentState;
+//					BehaviourEditor.graph.SetNode(this);
+					baseNode.stateRef.previousState = baseNode.stateRef.currentState;
 
 					// Add references to the children
-					for (int i = 0; i < currentState.transitions.Count; i++)
+					for (int i = 0; i < baseNode.stateRef.currentState.transitions.Count; i++)
 					{
 
 					}
 				}
 			}
 
-			if (isDuplicate)
+			if (baseNode.stateRef.isDuplicate)
 			{
 				EditorGUILayout.LabelField("State is a duplicate");
-				windowRect.height = 100; // Magic number
+				baseNode.windowRect.height = 100; // Magic number
 				return;
 			}
 
-			if (currentState)
+			if (baseNode.stateRef.currentState)
 			{
-				if (serializedState == null)
+				if (baseNode.stateRef.serializedState == null)
 				{
-					serializedState = new SerializedObject(currentState);
-					onStateList = new ReorderableList(serializedState, serializedState.FindProperty("onState"), true, true, true, true);
-					onEnterList = new ReorderableList(serializedState, serializedState.FindProperty("onEnter"), true, true, true, true);
-					onExitList = new ReorderableList(serializedState, serializedState.FindProperty("onExit"), true, true, true, true);
+					baseNode.stateRef.serializedState = new SerializedObject(baseNode.stateRef.currentState);
+					baseNode.stateRef.onStateList = new ReorderableList(baseNode.stateRef.serializedState, baseNode.stateRef.serializedState.FindProperty("onState"), true, true, true, true);
+					baseNode.stateRef.onEnterList = new ReorderableList(baseNode.stateRef.serializedState, baseNode.stateRef.serializedState.FindProperty("onEnter"), true, true, true, true);
+					baseNode.stateRef.onExitList = new ReorderableList(baseNode.stateRef.serializedState, baseNode.stateRef.serializedState.FindProperty("onExit"), true, true, true, true);
 				}
 
-				if (!collapse)
+				if (!baseNode.stateRef.collapse)
 				{
-					serializedState.Update();
-					HandleReorderableList(onStateList, "On State");
-					HandleReorderableList(onEnterList, "On Enter");
-					HandleReorderableList(onExitList, "On Exit");
+					baseNode.stateRef.serializedState.Update();
+					HandleReorderableList(baseNode.stateRef.onStateList, "On State");
+					HandleReorderableList(baseNode.stateRef.onEnterList, "On Enter");
+					HandleReorderableList(baseNode.stateRef.onExitList, "On Exit");
 
 					EditorGUILayout.LabelField(""); // Spacing
-					onStateList.DoLayoutList();
+					baseNode.stateRef.onStateList.DoLayoutList();
 					EditorGUILayout.LabelField(""); // Spacing
-					onEnterList.DoLayoutList();
+					baseNode.stateRef.onEnterList.DoLayoutList();
 					EditorGUILayout.LabelField(""); // Spacing
-					onExitList.DoLayoutList();
+					baseNode.stateRef.onExitList.DoLayoutList();
 
-					serializedState.ApplyModifiedProperties();
+					baseNode.stateRef.serializedState.ApplyModifiedProperties();
 
 					// Resize the window as items get added
 					float defaultHeight = 300.0f; // Magic number
-					float scaledHeight = defaultHeight + onStateList.count * 20 + onEnterList.count * 20 + onExitList.count * 20; // Magic number
-					windowRect.height = scaledHeight;
+					float scaledHeight = defaultHeight + baseNode.stateRef.onStateList.count * 20 + baseNode.stateRef.onEnterList.count * 20 + baseNode.stateRef.onExitList.count * 20; // Magic number
+					baseNode.windowRect.height = scaledHeight;
 				}
 			}
 		}
@@ -129,20 +116,20 @@ namespace SA.BehaviourEditor
 			};
 		}
 
-		public override void DrawCurve()
+		public override void DrawCurve(BaseNode baseNode)
 		{
-			base.DrawCurve();
+			
 		}
 
 		public Transition AddTransition()
 		{
-			return currentState.AddTransition();
+			return null;// currentState.AddTransition();
 		}
 
 		public void ClearReferences()
 		{
-			BehaviourEditor.ClearWindowsFromList(childNodes);
-			childNodes.Clear();
+//			BehaviourEditor.ClearWindowsFromList(childNodes);
+//			childNodes.Clear();
 		}
 	}
 }

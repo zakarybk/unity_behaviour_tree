@@ -8,6 +8,7 @@ namespace SA.BehaviourEditor
 {
 	public class TransitionNode : BaseNode
 	{
+		/*
 		public bool isDuplicate;
 		public Condition targetCondition;
 		public Condition previousCondition;
@@ -72,6 +73,6 @@ namespace SA.BehaviourEditor
 				BehaviourEditor.DrawNodeCurve(enterState.windowRect, rect, true, Color.cyan);
 			}
 		}
-
+		*/
 	}
 }
