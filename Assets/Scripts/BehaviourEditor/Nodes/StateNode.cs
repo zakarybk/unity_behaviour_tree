@@ -18,7 +18,7 @@ namespace SA.BehaviourEditor
 		{
 			if (baseNode.stateRef.currentState)
 			{
-				if (baseNode.stateRef.collapse)
+				if (baseNode.collapse)
 				{
 					baseNode.windowRect.height = 100; // Magic number
 				}
@@ -27,7 +27,7 @@ namespace SA.BehaviourEditor
 					//windowRect.height = 300; // Magic number
 				}
 
-				baseNode.stateRef.collapse = EditorGUILayout.Toggle(" ", baseNode.stateRef.collapse);
+				baseNode.collapse = EditorGUILayout.Toggle(" ", baseNode.collapse);
 			}
 			else
 			{
@@ -36,66 +36,55 @@ namespace SA.BehaviourEditor
 
 			baseNode.stateRef.currentState = (State)EditorGUILayout.ObjectField(baseNode.stateRef.currentState, typeof(State), false);
 
-			if (baseNode.stateRef.previousCollapse != baseNode.stateRef.collapse)
+			if (baseNode.previousCollapse != baseNode.collapse)
 			{
-				baseNode.stateRef.previousCollapse = baseNode.stateRef.collapse;
-//				BehaviourEditor.graph.SetStateNode(this);
+				baseNode.previousCollapse = baseNode.collapse;
 			}
 
 			if (baseNode.stateRef.previousState != baseNode.stateRef.currentState)
 			{
-				baseNode.stateRef.serializedState = null;
-				baseNode.stateRef.isDuplicate = BehaviourEditor.settings.graph.IsStateNodeDuplicate(this);
-
-				if (!baseNode.stateRef.isDuplicate)
-				{
-//					BehaviourEditor.graph.SetNode(this);
-					baseNode.stateRef.previousState = baseNode.stateRef.currentState;
-
-					// Add references to the children
-					for (int i = 0; i < baseNode.stateRef.currentState.transitions.Count; i++)
-					{
-
-					}
-				}
+				//baseNode.serializedState = null;
+				baseNode.isDuplicate = BehaviourEditor.settings.graph.IsStateDuplicate(baseNode);
 			}
 
-			if (baseNode.stateRef.isDuplicate)
+			if (baseNode.isDuplicate)
 			{
 				EditorGUILayout.LabelField("State is a duplicate");
 				baseNode.windowRect.height = 100; // Magic number
 				return;
 			}
 
-			if (baseNode.stateRef.currentState)
+			if (baseNode.stateRef.currentState != null)
 			{
-				if (baseNode.stateRef.serializedState == null)
+				SerializedObject serializedState = new SerializedObject(baseNode.stateRef.currentState);
+
+				ReorderableList onStateList;
+				ReorderableList onEnterList;
+				ReorderableList onExitList;
+
+				onStateList = new ReorderableList(serializedState, serializedState.FindProperty("onState"), true, true, true, true);
+				onEnterList = new ReorderableList(serializedState, serializedState.FindProperty("onEnter"), true, true, true, true);
+				onExitList = new ReorderableList(serializedState, serializedState.FindProperty("onExit"), true, true, true, true);
+
+				if (!baseNode.collapse)
 				{
-					baseNode.stateRef.serializedState = new SerializedObject(baseNode.stateRef.currentState);
-					baseNode.stateRef.onStateList = new ReorderableList(baseNode.stateRef.serializedState, baseNode.stateRef.serializedState.FindProperty("onState"), true, true, true, true);
-					baseNode.stateRef.onEnterList = new ReorderableList(baseNode.stateRef.serializedState, baseNode.stateRef.serializedState.FindProperty("onEnter"), true, true, true, true);
-					baseNode.stateRef.onExitList = new ReorderableList(baseNode.stateRef.serializedState, baseNode.stateRef.serializedState.FindProperty("onExit"), true, true, true, true);
-				}
-
-				if (!baseNode.stateRef.collapse)
-				{
-					baseNode.stateRef.serializedState.Update();
-					HandleReorderableList(baseNode.stateRef.onStateList, "On State");
-					HandleReorderableList(baseNode.stateRef.onEnterList, "On Enter");
-					HandleReorderableList(baseNode.stateRef.onExitList, "On Exit");
+					serializedState.Update();
+					HandleReorderableList(onStateList, "On State");
+					HandleReorderableList(onEnterList, "On Enter");
+					HandleReorderableList(onExitList, "On Exit");
 
 					EditorGUILayout.LabelField(""); // Spacing
-					baseNode.stateRef.onStateList.DoLayoutList();
+					onStateList.DoLayoutList();
 					EditorGUILayout.LabelField(""); // Spacing
-					baseNode.stateRef.onEnterList.DoLayoutList();
+					onEnterList.DoLayoutList();
 					EditorGUILayout.LabelField(""); // Spacing
-					baseNode.stateRef.onExitList.DoLayoutList();
+					onExitList.DoLayoutList();
 
-					baseNode.stateRef.serializedState.ApplyModifiedProperties();
+					serializedState.ApplyModifiedProperties();
 
 					// Resize the window as items get added
 					float defaultHeight = 300.0f; // Magic number
-					float scaledHeight = defaultHeight + baseNode.stateRef.onStateList.count * 20 + baseNode.stateRef.onEnterList.count * 20 + baseNode.stateRef.onExitList.count * 20; // Magic number
+					float scaledHeight = defaultHeight + (onStateList.count + onEnterList.count + onExitList.count) * 20; // Magic number
 					baseNode.windowRect.height = scaledHeight;
 				}
 			}
@@ -121,9 +110,9 @@ namespace SA.BehaviourEditor
 			
 		}
 
-		public Transition AddTransition()
+		public Transition AddTransition(BaseNode baseNode)
 		{
-			return null;// currentState.AddTransition();
+			return baseNode.stateRef.currentState.AddTransition();
 		}
 
 		public void ClearReferences()

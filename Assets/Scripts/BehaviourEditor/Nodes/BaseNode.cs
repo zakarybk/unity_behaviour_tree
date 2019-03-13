@@ -9,15 +9,23 @@ namespace SA.BehaviourEditor
 	[System.Serializable]
 	public class BaseNode
 	{
+		public int id;
 		public DrawNode drawNode;
-
 		public Rect windowRect;
-		[HideInInspector] public string windowTitle;
+		public string windowTitle;
+		public int enterNode;
+		public int targetNode;
+		public bool isDuplicate;
+		public string comment;
 
-		public StateNodeReferences stateRef;
+		public bool collapse;
+		[HideInInspector] public bool previousCollapse;
+
+		[SerializeField] public StateNodeReferences stateRef;
+		[SerializeField] public TransitionNodeReferences transitionRef;
 
 		// Draw the node window
-		public void	DrawWindow()
+		public virtual void DrawWindow(BaseNode baseNode)
 		{
 			if (drawNode != null)
 			{
@@ -26,7 +34,7 @@ namespace SA.BehaviourEditor
 		}
 
 		// Draw the curves between node windows
-		public void DrawCurve()
+		public virtual void DrawCurve(BaseNode baseNode)
 		{
 			if (drawNode != null)
 			{
@@ -39,18 +47,15 @@ namespace SA.BehaviourEditor
 	[System.Serializable]
 	public class StateNodeReferences
 	{
-		[HideInInspector] public bool collapse;
-		[HideInInspector] public bool previousCollapse;
-
-		[HideInInspector] public bool isDuplicate;
-
 		[HideInInspector] public State currentState;
-
 		[HideInInspector] public State previousState;
-
-		[HideInInspector] public SerializedObject serializedState;
-		[HideInInspector] public ReorderableList onStateList;
-		[HideInInspector] public ReorderableList onEnterList;
-		[HideInInspector] public ReorderableList onExitList;
 	}
+
+	[System.Serializable]
+	public class TransitionNodeReferences
+	{
+		[HideInInspector] public Condition previousCondition;
+		[HideInInspector] public int transitionId;
+	}
+
 }

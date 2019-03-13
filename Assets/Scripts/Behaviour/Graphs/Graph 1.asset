@@ -11,14 +11,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff52a64d66f8a3d4fba8f911140a7376, type: 3}
   m_Name: Graph 1
   m_EditorClassIdentifier: 
-  saved_StateNodes:
-  - state: {fileID: 11400000, guid: f3f63620af7a1b0429b194eb3eb61ca5, type: 2}
-    position: {x: 296, y: 242}
-    isCollapsed: 0
-    savedConditions:
-    - transition:
-        condition: {fileID: 11400000, guid: f5f5419e30702704fbff48f43ecaa512, type: 2}
-        targetState: {fileID: 0}
-        disable: 0
-      condition: {fileID: 11400000, guid: f5f5419e30702704fbff48f43ecaa512, type: 2}
-      position: {x: 637, y: 152}
+  windows:
+  - id: 0
+    drawNode: {fileID: 11400000, guid: b6daa738884e70f4ca2136e28b4bcf1b, type: 2}
+    windowRect:
+      serializedVersion: 2
+      x: 67
+      y: 108
+      width: 200
+      height: 320
+    windowTitle: State
+    enterNode: 0
+    targetNode: 0
+    isDuplicate: 0
+    comment: 
+    collapse: 0
+    previousCollapse: 0
+    stateRef:
+      currentState: {fileID: 11400000, guid: f3f63620af7a1b0429b194eb3eb61ca5, type: 2}
+      previousState: {fileID: 0}
+    transitionRef:
+      previousCondition: {fileID: 0}
+      transitionId: 0
+  - id: 1
+    drawNode: {fileID: 0}
+    windowRect:
+      serializedVersion: 2
+      x: 537
+      y: 200
+      width: 200
+      height: 100
+    windowTitle: Comment
+    enterNode: 0
+    targetNode: 0
+    isDuplicate: 0
+    comment: This is a comment
+    collapse: 0
+    previousCollapse: 0
+    stateRef:
+      currentState: {fileID: 0}
+      previousState: {fileID: 0}
+    transitionRef:
+      previousCondition: {fileID: 0}
+      transitionId: 0
+  idCount: 2

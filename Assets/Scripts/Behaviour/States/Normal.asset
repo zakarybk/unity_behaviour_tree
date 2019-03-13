@@ -11,16 +11,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2490b1f75dc11d46b141341ab151206, type: 3}
   m_Name: Normal
   m_EditorClassIdentifier: 
-  onState: []
+  onState:
+  - {fileID: 11400000, guid: 44cbb5ca05b0ef643b7da41c88265d80, type: 2}
   onEnter: []
   onExit: []
+  idCount: 0
   transitions:
-  - condition: {fileID: 11400000, guid: f5f5419e30702704fbff48f43ecaa512, type: 2}
+  - id: 0
+    condition: {fileID: 11400000, guid: f5f5419e30702704fbff48f43ecaa512, type: 2}
     targetState: {fileID: 0}
     disable: 0
-  - condition: {fileID: 11400000, guid: f5f5419e30702704fbff48f43ecaa512, type: 2}
+  - id: 0
+    condition: {fileID: 11400000, guid: f5f5419e30702704fbff48f43ecaa512, type: 2}
     targetState: {fileID: 0}
     disable: 0
-  - condition: {fileID: 11400000, guid: f5f5419e30702704fbff48f43ecaa512, type: 2}
+  - id: 0
+    condition: {fileID: 11400000, guid: f5f5419e30702704fbff48f43ecaa512, type: 2}
     targetState: {fileID: 0}
     disable: 0

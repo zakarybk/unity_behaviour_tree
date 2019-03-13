@@ -11,6 +11,7 @@ namespace SA
 		public StateActions[] onEnter;
 		public StateActions[] onExit;
 
+		public int idCount;
 		public List<Transition> transitions = new List<Transition>();
 
 		public void OnEnter(StateManager stateManager)
@@ -68,7 +69,20 @@ namespace SA
 		{
 			Transition retVal = new Transition(); // retval return val
 			transitions.Add(retVal);
+			retVal.id = idCount;
+			idCount++;
 			return retVal;
+		}
+
+		public Transition GetTransition(int id)
+		{
+			for (int i = 0; i < transitions.Count; i++)
+			{
+				if (transitions[i].id == id)
+					return transitions[i];
+			}
+
+			return null;
 		}
 
 	}

@@ -47,6 +47,12 @@ namespace SA.BehaviourEditor
 
 			UserInput(e); // Run mouse click events
 			DrawWindows();
+
+			if (e.type == EventType.MouseDrag)
+			{
+				settings.graph.DeleteWindowsThatNeedTo();
+				Repaint();
+			}
 		}
 
 		void DrawWindows()
@@ -62,7 +68,7 @@ namespace SA.BehaviourEditor
 				// Draw curves between node windows
 				foreach (BaseNode node in settings.graph.windows)
 				{
-					node.DrawCurve();
+					node.DrawCurve(node);
 				}
 
 				// Draw node windows
@@ -83,7 +89,7 @@ namespace SA.BehaviourEditor
 		// Draw passed node window based on index in windows
 		void DrawNodeWindow(int i)
 		{
-			settings.graph.windows[i].DrawWindow();
+			settings.graph.windows[i].DrawWindow(settings.graph.windows[i]);
 			GUI.DragWindow();
 		}
 
@@ -216,16 +222,12 @@ namespace SA.BehaviourEditor
 			switch (actions)
 			{
 				case UserActions.addState:
-					// Create a generic node and assign the type and add to graph
-					BaseNode baseNode = new BaseNode();
-					baseNode.windowRect.width = 200;	// Magic number
-					baseNode.windowRect.height = 100;   // Magic number
-					baseNode.drawNode = settings.stateNode;
-					baseNode.windowTitle = "State Node";
-					settings.graph.windows.Add(baseNode);
+					settings.AddNodeOnGraph(settings.stateNode, 200, 100, "State", mousePosition);
 
 					break;
 				case UserActions.addComment:
+					BaseNode commentNode = settings.AddNodeOnGraph(settings.commentNode, 200, 100, "Comment", mousePosition);
+					commentNode.comment = "This is a comment";
 
 					break;
 				case UserActions.addTransitionNode:

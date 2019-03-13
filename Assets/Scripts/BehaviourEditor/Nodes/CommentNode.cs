@@ -4,15 +4,17 @@ using UnityEngine;
 
 namespace SA.BehaviourEditor
 {
-	public class CommentNode
+	[CreateAssetMenu(menuName = "Editor/Nodes/Comment Node")]
+	public class CommentNode : DrawNode
 	{
-		/*
-		string comment = "This is a comment.";
-
-		public override void DrawWindow()
+		public override void DrawWindow(BaseNode baseNode)
 		{
-			comment = GUILayout.TextArea(comment, 200); // Magic number
+			baseNode.comment = GUILayout.TextArea(baseNode.comment, 200); // Magic number
 		}
-		*/
+
+		public override void DrawCurve(BaseNode baseNode)
+		{
+
+		}
 	}
 }
