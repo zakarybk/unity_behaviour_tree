@@ -9,18 +9,22 @@ namespace SA.BehaviourEditor
 	{
 		#region Variables
 		Vector3 mousePosition;
-		bool makingTransition = false;
 		bool clickedOnWindow = false;
 		BaseNode selectedNode;
 
 		public static EditorSettings settings;
+		int transitionFromId;
+		Rect mouseRect = new Rect(0, 0, 1, 1);
+		Rect all = new Rect(-5, -5, 10000, 10000);
+		GUIStyle style;
 
 		public enum UserActions
 		{
 			addState,
 			addTransitionNode,
 			removeNode,
-			addComment
+			addComment,
+			makeTransition
 		}
 		#endregion
 
@@ -36,6 +40,7 @@ namespace SA.BehaviourEditor
 		{
 			// Load saved settings
 			settings = Resources.Load("EditorSettings") as EditorSettings;
+			style = settings.skin.GetStyle("window");
 		}
 		#endregion
 
@@ -53,10 +58,22 @@ namespace SA.BehaviourEditor
 				settings.graph.DeleteWindowsThatNeedTo();
 				Repaint();
 			}
+
+			if (settings.makeTransition)
+			{
+				// Draw a line/curve from selected node to mouse position
+				mouseRect.x = mousePosition.x;
+				mouseRect.y = mousePosition.y;
+				Rect from = settings.graph.GetNodeWithIndex(transitionFromId).windowRect;
+				DrawNodeCurve(from, mouseRect, true, Color.blue);
+				Repaint(); // Repaint to stop it looking choppy
+			}
 		}
 
 		void DrawWindows()
 		{
+			GUILayout.BeginArea(all, style); // Draw skin
+
 			BeginWindows(); // ? where did this come from?
 
 			EditorGUILayout.LabelField(" ", GUILayout.Width(100));
@@ -84,6 +101,7 @@ namespace SA.BehaviourEditor
 			}
 
 			EndWindows();
+			GUILayout.EndArea();
 		}
 
 		// Draw passed node window based on index in windows
@@ -101,7 +119,7 @@ namespace SA.BehaviourEditor
 			int LEFT = 0;
 			int RIGHT = 1;
 
-			if (!makingTransition && e.type == EventType.MouseDown)
+			if (!settings.makeTransition && e.type == EventType.MouseDown)
 			{
 				if (e.button == LEFT)
 					LeftClick(e);
@@ -109,7 +127,7 @@ namespace SA.BehaviourEditor
 					RightClick(e);
 			}
 
-			if (!makingTransition && e.type == EventType.MouseDrag)
+			if (!settings.makeTransition && e.type == EventType.MouseDrag)
 			{
 				if (e.button == LEFT)
 				{
@@ -118,6 +136,14 @@ namespace SA.BehaviourEditor
 
 //					if (selectedNode != null && graph != null)
 //						graph.SetNode(selectedNode);
+				}
+			}
+
+			if (settings.makeTransition && e.button == 0)
+			{
+				if (e.type == EventType.MouseDown)
+				{
+					MakeTransition();
 				}
 			}
 		}
@@ -136,6 +162,39 @@ namespace SA.BehaviourEditor
 			else
 				AddNewNode(e);
 		}
+
+		void MakeTransition()
+		{
+			settings.makeTransition = false;
+
+			// Find the new selection
+			selectedNode = NodeFromMousePosition();
+
+			// null false | val true
+			clickedOnWindow = selectedNode == null ? false : true;
+
+			if (clickedOnWindow)
+			{
+				if (selectedNode.drawNode is StateNode)
+				{
+					if (selectedNode.id != transitionFromId)
+					{
+						// Get the transition and set the target
+						BaseNode transitionNode = settings.graph.GetNodeWithIndex(transitionFromId);
+						transitionNode.targetNode = selectedNode.id;
+
+						// Set the targetState for the transition
+						BaseNode enterNode = BehaviourEditor.settings.graph.GetNodeWithIndex(transitionNode.enterNode);
+						Transition transition = enterNode.stateRef.currentState.GetTransition(transitionNode.transitionRef.transitionId);
+						transition.targetState = selectedNode.stateRef.currentState;
+					}
+				}
+			}
+		}
+
+		#endregion
+
+		#region Context Menus
 
 		/*	Creates a context menu like - for creating new nodes
 		 * ----------
@@ -178,15 +237,15 @@ namespace SA.BehaviourEditor
 			{
 				if (selectedNode.stateRef.currentState != null)
 				{
-					menu.AddItem(new GUIContent("Add Transition"), false, ContextCallback, UserActions.addTransitionNode);
+					menu.AddItem(new GUIContent("Add Condition"), false, ContextCallback, UserActions.addTransitionNode);
 				}
 				else
 				{
-					menu.AddDisabledItem(new GUIContent("Add Transition"));
+					menu.AddDisabledItem(new GUIContent("Add Condition"));
 				}
 
 				// Add items to the menu
-				menu.AddItem(new GUIContent("Add Transition"), false, ContextCallback, UserActions.addTransitionNode);
+				menu.AddItem(new GUIContent("Add Condition"), false, ContextCallback, UserActions.addTransitionNode);
 				menu.AddSeparator(""); // padding/spacing out
 				menu.AddItem(new GUIContent("Remove"), false, ContextCallback, UserActions.removeNode);
 			}
@@ -194,6 +253,16 @@ namespace SA.BehaviourEditor
 			// TransitionNode
 			if (selectedNode.drawNode is TransitionNode)
 			{
+				// Only allow transitions from unassigned or duplicate nodes
+				if (selectedNode.isDuplicate || !selectedNode.isAssigned)
+				{
+					menu.AddDisabledItem(new GUIContent("Make Transition"));
+				}
+				else
+				{
+					menu.AddItem(new GUIContent("Make Transition"), false, ContextCallback, UserActions.makeTransition);
+				}
+
 				// Add items to the menu
 				menu.AddItem(new GUIContent("Remove"), false, ContextCallback, UserActions.removeNode);
 			}
@@ -227,7 +296,7 @@ namespace SA.BehaviourEditor
 
 					break;
 				case UserActions.addTransitionNode:
-					BaseNode transitionNode = settings.AddNodeOnGraph(settings.transitionNode, 200, 100, "Transition", mousePosition);
+					BaseNode transitionNode = settings.AddNodeOnGraph(settings.transitionNode, 200, 100, "Condition", mousePosition);
 					transitionNode.enterNode = selectedNode.id;
 					Transition transition = settings.stateNode.AddTransition(selectedNode);
 					transitionNode.transitionRef.transitionId = transition.id;
@@ -235,6 +304,10 @@ namespace SA.BehaviourEditor
 					break;
 				case UserActions.removeNode:
 					settings.graph.RemoveNode(selectedNode.id);
+					break;
+				case UserActions.makeTransition:
+					transitionFromId = selectedNode.id;
+					settings.makeTransition = true;
 					break;
 				default:
 					Debug.Log("State not found!");
@@ -245,6 +318,7 @@ namespace SA.BehaviourEditor
 			EditorUtility.SetDirty(settings);
 			
 		}
+		#endregion
 
 		// Current mouse position -- no fallback if no node is found
 		BaseNode NodeFromMousePosition()
@@ -266,74 +340,8 @@ namespace SA.BehaviourEditor
 		{
 
 		}
-		#endregion
 
 		#region Helper Methods
-		/*
-		public static StateNode AddStateNode(Vector2 position)
-		{
-			// Create a new state node and set the position and size
-			StateNode stateNode = CreateInstance<StateNode>();
-			stateNode.windowRect = new Rect(position.x, position.y, 200, 300); // magic numbers
-			stateNode.windowTitle = "State";
-
-			// Add the node to our list
-			windows.Add(stateNode);
-
-			// Add to the graph
-//			graph.SetStateNode(stateNode);
-
-			return stateNode;
-		}
-
-		public static CommentNode AddCommentNode(Vector2 position)
-		{
-			// Create a new comment node and set the position and size
-			CommentNode commentNode = CreateInstance<CommentNode>();
-			commentNode.windowRect = new Rect(position.x, position.y, 200, 100); // magic numbers
-			commentNode.windowTitle = "Comment";
-
-			// Add the node to our list
-			windows.Add(commentNode);
-
-			return commentNode;
-		}
-
-		public static TransitionNode AddTransitionNode(int index, Transition transition, StateNode from)
-		{
-			Rect fromRect = from.windowRect;
-			fromRect.x += 50;
-			float targetY = fromRect.y - fromRect.height;
-
-			if (from.currentState)
-			{
-				targetY += (index * 100); // Magic number
-			}
-
-			fromRect.y = targetY;
-			fromRect.x += 200 + 100;
-			fromRect.y += fromRect.height * 0.7f;
-
-			Vector2 position = new Vector2(fromRect.x, fromRect.y);
-
-			return AddTransitionNode(position, transition, from);
-		}
-
-		public static TransitionNode AddTransitionNode(Vector2 position, Transition transition, StateNode from)
-		{
-			TransitionNode transitionNode = CreateInstance<TransitionNode>();
-			transitionNode.Init(from, transition);
-			transitionNode.windowRect = new Rect(position.x, position.y, 200, 80); // Magic numbers
-			transitionNode.windowTitle = "Condition Check";
-
-			windows.Add(transitionNode);
-
-			// Add the new child to the StateNode
-			from.childNodes.Add(transitionNode);
-
-			return transitionNode;
-		}
-		*/
 
 		public static void DrawNodeCurve(Rect start, Rect end, bool left, Color curveColour)
 		{
@@ -357,11 +365,11 @@ namespace SA.BehaviourEditor
 			// Draw the shadow
 			for (int i = 0; i < 3; i++)
 			{
-				Handles.DrawBezier(startPos, endPos, startTan, endTan, shadow, null, (i + 1) * 0.5f);
+				Handles.DrawBezier(startPos, endPos, startTan, endTan, shadow, null, (i + 1) * 1);
 			}
 
 			// Draw the actual line
-			Handles.DrawBezier(startPos, endPos, startTan, endTan, curveColour, null, 1);
+			Handles.DrawBezier(startPos, endPos, startTan, endTan, curveColour, null, 3);
 		}
 
 		public static void ClearWindowsFromList(List<BaseNode> nodes)

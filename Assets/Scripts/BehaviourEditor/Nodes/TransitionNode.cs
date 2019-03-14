@@ -29,10 +29,13 @@ namespace SA.BehaviourEditor
 			if (transition.condition == null)
 			{
 				EditorGUILayout.LabelField("No condition set!");
+				baseNode.isAssigned = false;
 			}
 			// Allow the user to enable/disable the transition
 			else
 			{
+				baseNode.isAssigned = true;
+
 				if (baseNode.isDuplicate)
 				{
 					EditorGUILayout.LabelField("Duplicate condition!");
@@ -62,86 +65,49 @@ namespace SA.BehaviourEditor
 			rect.width = 1;
 			rect.height = 1;
 
-			BaseNode temp = BehaviourEditor.settings.graph.GetNodeWithIndex(baseNode.enterNode);
+			BaseNode enter = BehaviourEditor.settings.graph.GetNodeWithIndex(baseNode.enterNode);
 
-			if (temp == null)
+			if (enter == null)
 			{
 				BehaviourEditor.settings.graph.RemoveNode(baseNode.id);
 			}
 			else
 			{
-				Rect r = temp.windowRect;
-				BehaviourEditor.DrawNodeCurve(r, rect, true, Color.cyan);
+				Color targetColor = Color.green;
+
+				if (!baseNode.isAssigned || baseNode.isDuplicate)
+					targetColor = Color.red;
+
+				Rect r = enter.windowRect;
+				BehaviourEditor.DrawNodeCurve(r, rect, true, targetColor);
 			}
-		}
 
+			// Don't draw lines from duplicates
+			if (baseNode.isDuplicate)
+				return;
 
-
-		/*
-		public bool isDuplicate;
-		public Condition targetCondition;
-		public Condition previousCondition;
-		public Transition transition;
-
-		public StateNode enterState;
-		public StateNode targetState;
-
-		public void Init(StateNode enterState, Transition transition)
-		{
-			this.enterState = enterState;
-		}
-
-		public override void DrawWindow()
-		{
-			// Directly editing public var
-			// Setup the condition
-			targetCondition = (Condition)EditorGUILayout.ObjectField(
-				targetCondition,
-				typeof(Condition),
-				false
-			);
-
-			// No condition - warn the user
-			if (targetCondition == null)
+			if (baseNode.targetNode > 0) // Zero is default - nothing will be set to it
 			{
-				EditorGUILayout.LabelField("No condition set!");
-			}
-			// Allow the user to enable/disable the transition
-			else
-			{
-				if (isDuplicate)
+				BaseNode exitNode = BehaviourEditor.settings.graph.GetNodeWithIndex(baseNode.targetNode);
+
+				if (exitNode == null)
 				{
-					EditorGUILayout.LabelField("Duplicate condition!");
+					baseNode.targetNode = -1;
 				}
 				else
 				{
-//					transition.disable = EditorGUILayout.Toggle("Disable", transition.disable);
+					rect = baseNode.windowRect;
+					rect.x += rect.width;
+					Rect exitRect = exitNode.windowRect;
+					exitRect.x -= exitRect.width * 0.5f;
+
+					Color targetColor = Color.green;
+					if (!exitNode.isAssigned || exitNode.isDuplicate)
+						targetColor = Color.red;
+
+					BehaviourEditor.DrawNodeCurve(rect, exitRect, false, targetColor);
 				}
 			}
-
-			if (previousCondition != targetCondition)
-			{
-				isDuplicate = BehaviourEditor.graph.IsTransitionDuplicate(this);
-				if (!isDuplicate)
-				{
-					BehaviourEditor.graph.SetNode(this);
-				}
-				previousCondition = targetCondition;
-			}
 		}
-
-		public override void DrawCurve()
-		{
-			if (enterState)
-			{
-				Rect rect = windowRect;
-				rect.y += windowRect.height * 0.5f;
-				rect.width = 1;
-				rect.height = 1;
-
-				BehaviourEditor.DrawNodeCurve(enterState.windowRect, rect, true, Color.cyan);
-			}
-		}
-		*/
 	}
 }

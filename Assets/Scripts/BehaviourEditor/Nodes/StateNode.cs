@@ -56,6 +56,8 @@ namespace SA.BehaviourEditor
 
 			if (baseNode.stateRef.currentState != null)
 			{
+				baseNode.isAssigned = true;
+
 				SerializedObject serializedState = new SerializedObject(baseNode.stateRef.currentState);
 
 				ReorderableList onStateList;
@@ -87,6 +89,10 @@ namespace SA.BehaviourEditor
 					float scaledHeight = defaultHeight + (onStateList.count + onEnterList.count + onExitList.count) * 20; // Magic number
 					baseNode.windowRect.height = scaledHeight;
 				}
+			}
+			else
+			{
+				baseNode.isAssigned = false; // Said true - probably meant false
 			}
 		}
 
