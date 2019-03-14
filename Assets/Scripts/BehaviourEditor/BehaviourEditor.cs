@@ -170,16 +170,13 @@ namespace SA.BehaviourEditor
 
 		void ModifyNode(Event e)
 		{
-			/*
 			// Create the base
 			GenericMenu menu = new GenericMenu();
 
 			// StateNode
-			if (selectedNode is StateNode) // poly instead?
+			if (selectedNode.drawNode is StateNode) // poly instead?
 			{
-				StateNode stateNode = (StateNode)selectedNode; // Why cast? Why create a var when selectedNode could be used?
-
-				if (stateNode.currentState)
+				if (selectedNode.stateRef.currentState != null)
 				{
 					menu.AddItem(new GUIContent("Add Transition"), false, ContextCallback, UserActions.addTransitionNode);
 				}
@@ -195,14 +192,14 @@ namespace SA.BehaviourEditor
 			}
 
 			// TransitionNode
-			if (selectedNode is TransitionNode)
+			if (selectedNode.drawNode is TransitionNode)
 			{
 				// Add items to the menu
 				menu.AddItem(new GUIContent("Remove"), false, ContextCallback, UserActions.removeNode);
 			}
 
 			// CommentNode
-			if (selectedNode is CommentNode)
+			if (selectedNode.drawNode is CommentNode)
 			{
 				// Add items to the menu
 				menu.AddItem(new GUIContent("Remove"), false, ContextCallback, UserActions.removeNode);
@@ -211,7 +208,6 @@ namespace SA.BehaviourEditor
 			// Apply the menu
 			menu.ShowAsContext();
 			e.Use();
-			*/
 		}
 
 		void ContextCallback(object o)
@@ -231,11 +227,14 @@ namespace SA.BehaviourEditor
 
 					break;
 				case UserActions.addTransitionNode:
-					// Create a new transition node and set the position and size
+					BaseNode transitionNode = settings.AddNodeOnGraph(settings.transitionNode, 200, 100, "Transition", mousePosition);
+					transitionNode.enterNode = selectedNode.id;
+					Transition transition = settings.stateNode.AddTransition(selectedNode);
+					transitionNode.transitionRef.transitionId = transition.id;
 
 					break;
 				case UserActions.removeNode:
-
+					settings.graph.RemoveNode(selectedNode.id);
 					break;
 				default:
 					Debug.Log("State not found!");
