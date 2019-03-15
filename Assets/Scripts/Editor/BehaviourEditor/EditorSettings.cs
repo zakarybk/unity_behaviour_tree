@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SA.BehaviourEditor
 {
-	[CreateAssetMenu(menuName ="Editor/Settings")]
+	[CreateAssetMenu(menuName = "Behaviour/Editor/Settings")]
 	public class EditorSettings : ScriptableObject
 	{
 		public BehaviourGraph graph;

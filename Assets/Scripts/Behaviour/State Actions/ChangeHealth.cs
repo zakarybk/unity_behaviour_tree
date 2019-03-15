@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SA
 {
-	[CreateAssetMenu(menuName = "Actions/Test/Add Health")]
+	[CreateAssetMenu(menuName = "Behaviour/Actions/Test/Add Health")]
 	public class ChangeHealth : StateActions
 	{
 		public override void Execute(StateManager states)

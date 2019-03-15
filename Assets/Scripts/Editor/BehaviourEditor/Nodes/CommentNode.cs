@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SA.BehaviourEditor
 {
-	[CreateAssetMenu(menuName = "Editor/Nodes/Comment Node")]
+	[CreateAssetMenu(menuName = "Behaviour/Editor/Nodes/Comment Node")]
 	public class CommentNode : DrawNode
 	{
 		public override void DrawWindow(BaseNode baseNode)

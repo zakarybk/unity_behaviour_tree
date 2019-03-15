@@ -5,7 +5,7 @@ using UnityEditor;
 
 namespace SA.BehaviourEditor
 {
-	[CreateAssetMenu(menuName = "Editor/Nodes/Portal Node")]
+	[CreateAssetMenu(menuName = "Behaviour/Editor/Nodes/Portal Node")]
 	public class PortalNode : DrawNode
 	{
 		public override void DrawCurve(BaseNode baseNode)

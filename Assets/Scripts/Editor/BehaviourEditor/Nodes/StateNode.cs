@@ -10,7 +10,7 @@ using SA;
 
 namespace SA.BehaviourEditor
 {
-	[CreateAssetMenu(menuName = "Editor/Nodes/State Node")]
+	[CreateAssetMenu(menuName = "Behaviour/Editor/Nodes/State Node")]
 	public class StateNode : DrawNode
 	{
 

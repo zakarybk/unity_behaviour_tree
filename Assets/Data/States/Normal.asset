@@ -14,5 +14,9 @@ MonoBehaviour:
   onState: []
   onEnter: []
   onExit: []
-  idCount: 0
-  transitions: []
+  idCount: 1
+  transitions:
+  - id: 0
+    condition: {fileID: 11400000, guid: f5f5419e30702704fbff48f43ecaa512, type: 2}
+    targetState: {fileID: 11400000, guid: 587e27b53c66d3247bd6998de11c2c48, type: 2}
+    disable: 0

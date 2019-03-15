@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SA
 {
-	[CreateAssetMenu(menuName = "Conditions/Is Dead")]
+	[CreateAssetMenu(menuName = "Behaviour/Conditions/Is Dead")]
 	public class IsDead : Condition
 	{
 		public void OnEnable()

@@ -5,7 +5,7 @@ using SA.BehaviourEditor;
 
 namespace SA
 {
-	[CreateAssetMenu]
+	[CreateAssetMenu(menuName = "Behaviour/BehaviourGraph")]
 	public class BehaviourGraph : ScriptableObject
 	{
 		[SerializeField]

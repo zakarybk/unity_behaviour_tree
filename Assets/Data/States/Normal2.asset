@@ -11,13 +11,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2490b1f75dc11d46b141341ab151206, type: 3}
   m_Name: Normal2
   m_EditorClassIdentifier: 
-  onState:
-  - {fileID: 0}
+  onState: []
   onEnter: []
   onExit: []
-  idCount: 1
+  idCount: 2
   transitions:
-  - id: 0
-    condition: {fileID: 0}
-    targetState: {fileID: 11400000, guid: f8044233e9fbdae47acd4338eaf7e6d9, type: 2}
+  - id: 1
+    condition: {fileID: 11400000, guid: 1cc52f35eb51ec140b5beca8ccb61afe, type: 2}
+    targetState: {fileID: 11400000, guid: f3f63620af7a1b0429b194eb3eb61ca5, type: 2}
     disable: 0
