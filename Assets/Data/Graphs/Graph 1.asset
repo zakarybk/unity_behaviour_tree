@@ -16,10 +16,10 @@ MonoBehaviour:
     drawNode: {fileID: 11400000, guid: b6daa738884e70f4ca2136e28b4bcf1b, type: 2}
     windowRect:
       serializedVersion: 2
-      x: 85
+      x: 85.00077
       y: 162
       width: 200
-      height: 300
+      height: 320
     windowTitle: State
     enterNode: 0
     targetNode: 0

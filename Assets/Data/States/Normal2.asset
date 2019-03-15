@@ -11,7 +11,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2490b1f75dc11d46b141341ab151206, type: 3}
   m_Name: Normal2
   m_EditorClassIdentifier: 
-  onState: []
+  onState:
+  - {fileID: 0}
   onEnter: []
   onExit: []
   idCount: 0

@@ -19,6 +19,7 @@ namespace SA.BehaviourEditor
 		GUIStyle style;
 		GUIStyle activeStyle;
 		Vector2 scrollPos;
+		Vector2 scrollStartPos;
 		static BehaviourEditor editor;
 		public static StateManager stateManager;
 		public static bool forceSetDirty;
@@ -32,7 +33,8 @@ namespace SA.BehaviourEditor
 			removeNode,
 			addComment,
 			makeTransition,
-			makePortal
+			makePortal,
+			resetPan
 		}
 		#endregion
 
@@ -201,7 +203,9 @@ namespace SA.BehaviourEditor
 
 			int LEFT = 0;
 			int RIGHT = 1;
+			int MIDDLE = 2;
 
+			// Creating nodes
 			if (!settings.makeTransition && e.type == EventType.MouseDown)
 			{
 				if (e.button == LEFT)
@@ -210,6 +214,7 @@ namespace SA.BehaviourEditor
 					RightClick(e);
 			}
 
+			// Moving
 			if (!settings.makeTransition && e.type == EventType.MouseDrag)
 			{
 				if (e.button == LEFT)
@@ -222,13 +227,62 @@ namespace SA.BehaviourEditor
 				}
 			}
 
-			if (settings.makeTransition && e.button == 0)
+			// Creating transitions
+			if (settings.makeTransition && e.button == LEFT)
 			{
 				if (e.type == EventType.MouseDown)
 				{
 					MakeTransition();
 				}
 			}
+
+			// Panning
+			if (e.button == MIDDLE)
+			{
+				if (e.type == EventType.MouseDown)
+				{
+					scrollStartPos = e.mousePosition;
+				}
+				else if (e.type == EventType.MouseDrag)
+				{
+					HandlePanning(e);
+				}
+				else if (e.type == EventType.MouseUp)
+				{
+
+				}
+			}
+		}
+
+		void HandlePanning(Event e)
+		{
+			// Workout the offset of the mouse movement
+			Vector2 offset = e.mousePosition - scrollStartPos;
+			offset *= 0.6f;
+			scrollStartPos = e.mousePosition;
+			scrollPos += offset;
+
+			// Move all windows accordingly to pan across
+			for (int i = 0; i < settings.graph.windows.Count; i++)
+			{
+				BaseNode baseNode = settings.graph.windows[i];
+
+				baseNode.windowRect.x += offset.x;
+				baseNode.windowRect.y += offset.y;
+			}
+		}
+
+		void ResetScroll()
+		{
+			for (int i = 0; i < settings.graph.windows.Count; i++)
+			{
+				BaseNode baseNode = settings.graph.windows[i];
+
+				baseNode.windowRect.x -= scrollPos.x;
+				baseNode.windowRect.y -= scrollPos.y;
+			}
+
+			scrollPos = Vector2.zero;
 		}
 
 		void RightClick(Event e)
@@ -298,6 +352,8 @@ namespace SA.BehaviourEditor
 				menu.AddItem(new GUIContent("Add State"), false, ContextCallback, UserActions.addState);
 				menu.AddItem(new GUIContent("Add Portal"), false, ContextCallback, UserActions.makePortal);
 				menu.AddItem(new GUIContent("Add Comment"), false, ContextCallback, UserActions.addComment);
+				menu.AddSeparator("");
+				menu.AddItem(new GUIContent("Reset camera"), false, ContextCallback, UserActions.resetPan);
 			}
 			else
 			{
@@ -404,6 +460,9 @@ namespace SA.BehaviourEditor
 				case UserActions.makeTransition:
 					transitionFromId = selectedNode.id;
 					settings.makeTransition = true;
+					break;
+				case UserActions.resetPan:
+					ResetScroll();
 					break;
 				default:
 					Debug.Log("State not found!");
