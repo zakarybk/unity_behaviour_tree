@@ -123,7 +123,7 @@ namespace SA.BehaviourCustomUI
 					new Rect(rect.x + (rect.width * 0.75f), rect.y, rect.width * 0.2f, EditorGUIUtility.singleLineHeight),
 					"Disable"
 				);
-				EditorGUI.ObjectField(
+				EditorGUI.PropertyField(
 					new Rect(rect.x + (rect.width * 0.90f), rect.y, rect.width * 0.2f, EditorGUIUtility.singleLineHeight), 
 					element.FindPropertyRelative("disable"), 
 					GUIContent.none
