@@ -83,7 +83,8 @@ namespace SA.BehaviourEditor
 
 				if (!baseNode.isDuplicate)
 				{
-
+					// Save the changes
+					BehaviourEditor.forceSetDirty = true;
 				}
 			}
 		}

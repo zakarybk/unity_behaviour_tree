@@ -21,7 +21,9 @@ namespace SA.BehaviourEditor
 		Vector2 scrollPos;
 		static BehaviourEditor editor;
 		public static StateManager stateManager;
-		public static StateManager previousStateManager;
+		public static bool forceSetDirty;
+		static StateManager previousStateManager;
+		static State previousState;
 
 		public enum UserActions
 		{
@@ -49,6 +51,20 @@ namespace SA.BehaviourEditor
 			style = settings.skin.GetStyle("window");
 			activeStyle = settings.activeSkin.GetStyle("window");
 		}
+
+		private void Update()
+		{
+			// Repaint if anything has changed
+			if (stateManager != null)
+			{
+				if (previousState != stateManager.currentState)
+				{
+					previousState = stateManager.currentState;
+					Repaint();
+				}
+			}
+		}
+
 		#endregion
 
 		#region GUI Methods
@@ -92,6 +108,24 @@ namespace SA.BehaviourEditor
 				Rect from = settings.graph.GetNodeWithIndex(transitionFromId).windowRect;
 				DrawNodeCurve(from, mouseRect, true, Color.blue);
 				Repaint(); // Repaint to stop it looking choppy
+			}
+
+			// If we should save
+			if (forceSetDirty)
+			{
+				forceSetDirty = false;
+				// Save the settings and graph
+				EditorUtility.SetDirty(settings);
+				EditorUtility.SetDirty(settings.graph);
+
+				for (int i = 0; i < settings.graph.windows.Count; i++)
+				{
+					BaseNode baseNode = settings.graph.windows[i];
+
+					// Save the states
+					if (baseNode.stateRef.currentState != null)
+						EditorUtility.SetDirty(baseNode.stateRef.currentState);
+				}
 			}
 		}
 
@@ -377,7 +411,7 @@ namespace SA.BehaviourEditor
 			}
 
 			// Save the settings
-			EditorUtility.SetDirty(settings);
+			forceSetDirty = true;
 			
 		}
 		#endregion

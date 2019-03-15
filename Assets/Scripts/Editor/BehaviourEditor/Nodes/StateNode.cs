@@ -60,6 +60,9 @@ namespace SA.BehaviourEditor
 						pos.y += i * 100;
 						BehaviourEditor.AddTransitionNodeFromTransition(baseNode.stateRef.currentState.transitions[i], baseNode, pos);
 					}
+
+					// Save the changes
+					BehaviourEditor.forceSetDirty = true;
 				}
 			}
 

@@ -17,6 +17,15 @@ namespace SA.BehaviourEditor
 		{
 			baseNode.stateRef.currentState = (State)EditorGUILayout.ObjectField(baseNode.stateRef.currentState, typeof(State), false);
 			baseNode.isAssigned = baseNode.stateRef.currentState != null;
+
+			// If the state has changed
+			if (baseNode.stateRef.previousState != baseNode.stateRef.currentState)
+			{
+				baseNode.stateRef.previousState = baseNode.stateRef.currentState;
+
+				// Save the changes
+				BehaviourEditor.forceSetDirty = true;
+			}
 		}
 	}
 }
