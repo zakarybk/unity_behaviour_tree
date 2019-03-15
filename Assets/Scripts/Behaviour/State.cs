@@ -74,6 +74,16 @@ namespace SA
 			return retVal;
 		}
 
+		public void RemoveTransition(int id)
+		{
+			Transition toRemove = GetTransition(id);
+
+			if (toRemove != null)
+			{
+				transitions.Remove(toRemove);
+			}
+		}
+
 		public Transition GetTransition(int id)
 		{
 			for (int i = 0; i < transitions.Count; i++)

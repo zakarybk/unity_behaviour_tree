@@ -16,10 +16,25 @@ namespace SA.BehaviourEditor
 
 		public override void DrawWindow(BaseNode baseNode)
 		{
+			// Enter node
 			BaseNode enterNode = BehaviourEditor.settings.graph.GetNodeWithIndex(baseNode.enterNode);
 
+			if (enterNode == null)
+				return;
+
+			if (enterNode.stateRef.currentState == null)
+			{
+				BehaviourEditor.settings.graph.RemoveNode(baseNode.id);
+				return;
+			}
+
+			// Transition
 			Transition transition = enterNode.stateRef.currentState.GetTransition(baseNode.transitionRef.transitionId);
 
+			if (transition == null)
+				return;
+
+			// Transition condition
 			transition.condition = (Condition)EditorGUILayout.ObjectField(
 				transition.condition,
 				typeof(Condition),
@@ -42,7 +57,22 @@ namespace SA.BehaviourEditor
 				}
 				else
 				{
-					//					transition.disable = EditorGUILayout.Toggle("Disable", transition.disable);
+					GUILayout.Label(transition.condition.description);
+
+					BaseNode targetNode = BehaviourEditor.settings.graph.GetNodeWithIndex(baseNode.targetNode);
+
+					// Setup targetNode reference
+					if (targetNode != null)
+					{
+						if (targetNode.isDuplicate)
+							transition.targetState = null;
+						else
+							transition.targetState = targetNode.stateRef.currentState;
+					}
+					else
+					{
+						transition.targetState = null;
+					}
 				}
 			}
 
@@ -102,8 +132,19 @@ namespace SA.BehaviourEditor
 					exitRect.x -= exitRect.width * 0.5f;
 
 					Color targetColor = Color.green;
-					if (!exitNode.isAssigned || exitNode.isDuplicate)
-						targetColor = Color.red;
+
+					if (exitNode.drawNode is StateNode)
+					{ 
+						if (!exitNode.isAssigned || exitNode.isDuplicate)
+							targetColor = Color.red;
+					}
+					else
+					{
+						if (!exitNode.isAssigned)
+							targetColor = Color.red;
+						else
+							targetColor = Color.cyan;
+					}
 
 					BehaviourEditor.DrawNodeCurve(rect, exitRect, false, targetColor);
 				}

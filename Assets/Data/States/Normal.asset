@@ -8,6 +8,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 040754cdb0cb84540b599c41a55916b9, type: 3}
-  m_Name: New Is Dead 1
+  m_Script: {fileID: 11500000, guid: d2490b1f75dc11d46b141341ab151206, type: 3}
+  m_Name: Normal
   m_EditorClassIdentifier: 
+  onState: []
+  onEnter: []
+  onExit: []
+  idCount: 0
+  transitions: []

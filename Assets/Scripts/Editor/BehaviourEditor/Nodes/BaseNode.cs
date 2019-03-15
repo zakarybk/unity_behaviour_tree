@@ -48,15 +48,19 @@ namespace SA.BehaviourEditor
 	[System.Serializable]
 	public class StateNodeReferences
 	{
-		[HideInInspector] public State currentState;
+		public State currentState;
 		[HideInInspector] public State previousState;
+		public SerializedObject serializedState;
+		public ReorderableList onStateList;
+		public ReorderableList onEnterList;
+		public ReorderableList onExitList;
 	}
 
 	[System.Serializable]
 	public class TransitionNodeReferences
 	{
 		[HideInInspector] public Condition previousCondition;
-		[HideInInspector] public int transitionId;
+		public int transitionId;
 	}
 
 }

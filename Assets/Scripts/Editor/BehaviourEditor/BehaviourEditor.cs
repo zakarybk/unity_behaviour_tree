@@ -24,7 +24,8 @@ namespace SA.BehaviourEditor
 			addTransitionNode,
 			removeNode,
 			addComment,
-			makeTransition
+			makeTransition,
+			makePortal
 		}
 		#endregion
 
@@ -54,6 +55,12 @@ namespace SA.BehaviourEditor
 			DrawWindows();
 
 			if (e.type == EventType.MouseDrag)
+			{
+				settings.graph.DeleteWindowsThatNeedTo();
+				Repaint();
+			}
+
+			if (GUI.changed)
 			{
 				settings.graph.DeleteWindowsThatNeedTo();
 				Repaint();
@@ -175,7 +182,7 @@ namespace SA.BehaviourEditor
 
 			if (clickedOnWindow)
 			{
-				if (selectedNode.drawNode is StateNode)
+				if (selectedNode.drawNode is StateNode || selectedNode.drawNode is PortalNode)
 				{
 					if (selectedNode.id != transitionFromId)
 					{
@@ -213,12 +220,14 @@ namespace SA.BehaviourEditor
 			{
 				// Add items to the menu
 				menu.AddItem(new GUIContent("Add State"), false, ContextCallback, UserActions.addState);
+				menu.AddItem(new GUIContent("Add Portal"), false, ContextCallback, UserActions.makePortal);
 				menu.AddItem(new GUIContent("Add Comment"), false, ContextCallback, UserActions.addComment);
 			}
 			else
 			{
 				// Add items to the menu
 				menu.AddDisabledItem(new GUIContent("Add State"));
+				menu.AddDisabledItem(new GUIContent("Add Portal"));
 				menu.AddDisabledItem(new GUIContent("Add Comment"));
 			}
 
@@ -247,6 +256,12 @@ namespace SA.BehaviourEditor
 				// Add items to the menu
 				menu.AddItem(new GUIContent("Add Condition"), false, ContextCallback, UserActions.addTransitionNode);
 				menu.AddSeparator(""); // padding/spacing out
+				menu.AddItem(new GUIContent("Remove"), false, ContextCallback, UserActions.removeNode);
+			}
+
+			// PortalNode
+			if (selectedNode.drawNode is PortalNode) // poly instead?
+			{
 				menu.AddItem(new GUIContent("Remove"), false, ContextCallback, UserActions.removeNode);
 			}
 
@@ -290,19 +305,24 @@ namespace SA.BehaviourEditor
 					settings.AddNodeOnGraph(settings.stateNode, 200, 100, "State", mousePosition);
 
 					break;
+				case UserActions.makePortal:
+					settings.AddNodeOnGraph(settings.portalNode, 200, 50, "Portal", mousePosition);
+					break;
 				case UserActions.addComment:
 					BaseNode commentNode = settings.AddNodeOnGraph(settings.commentNode, 200, 100, "Comment", mousePosition);
 					commentNode.comment = "This is a comment";
 
 					break;
 				case UserActions.addTransitionNode:
-					BaseNode transitionNode = settings.AddNodeOnGraph(settings.transitionNode, 200, 100, "Condition", mousePosition);
-					transitionNode.enterNode = selectedNode.id;
-					Transition transition = settings.stateNode.AddTransition(selectedNode);
-					transitionNode.transitionRef.transitionId = transition.id;
+					AddTransitionNode(selectedNode, mousePosition);
 
 					break;
 				case UserActions.removeNode:
+					if (selectedNode.drawNode is TransitionNode)
+					{
+						BaseNode enterNode = settings.graph.GetNodeWithIndex(selectedNode.enterNode);
+						enterNode.stateRef.currentState.RemoveTransition(selectedNode.transitionRef.transitionId);
+					}
 					settings.graph.RemoveNode(selectedNode.id);
 					break;
 				case UserActions.makeTransition:
@@ -339,6 +359,31 @@ namespace SA.BehaviourEditor
 		void LeftClick(Event e)
 		{
 
+		}
+
+		public static BaseNode AddTransitionNode(BaseNode enterNode, Vector3 pos)
+		{
+			// Create a transition node and set the enter node reference
+			BaseNode transitionNode = settings.AddNodeOnGraph(settings.transitionNode, 200, 100, "Condition", pos); // Magic numbers
+			transitionNode.enterNode = enterNode.id;
+
+			// Create a transition and assign the transition id to the transition node
+			Transition transition = settings.stateNode.AddTransition(enterNode);
+			transitionNode.transitionRef.transitionId = transition.id;
+
+			return transitionNode;
+		}
+
+		public static BaseNode AddTransitionNodeFromTransition(Transition transition, BaseNode enterNode, Vector3 pos)
+		{
+			// Create a transition node and set the enter node reference
+			BaseNode transitionNode = settings.AddNodeOnGraph(settings.transitionNode, 200, 100, "Condition", pos); // Magic numbers
+			transitionNode.enterNode = enterNode.id;
+
+			// Assign the transition id to the transition node
+			transitionNode.transitionRef.transitionId = transition.id;
+
+			return transitionNode;
 		}
 
 		#region Helper Methods

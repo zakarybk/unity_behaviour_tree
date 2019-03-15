@@ -6,6 +6,8 @@ namespace SA
 {
 	public abstract class Condition : ScriptableObject
 	{
+		public string description;
+
 		public abstract bool HasMetCondition(StateManager state);
 
 	}

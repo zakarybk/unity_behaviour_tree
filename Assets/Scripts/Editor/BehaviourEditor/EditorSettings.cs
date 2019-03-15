@@ -9,6 +9,7 @@ namespace SA.BehaviourEditor
 	{
 		public BehaviourGraph graph;
 		public StateNode stateNode;
+		public PortalNode portalNode;
 		public TransitionNode transitionNode;
 		public CommentNode commentNode;
 		public bool makeTransition;
