@@ -20,6 +20,11 @@ namespace SA
 			ExecuteActions(stateManager, onEnter);
 		}
 
+		public void FixedTick(StateManager stateManager)
+		{
+			ExecuteActions(stateManager, onState);
+		}
+
 		public void Tick(StateManager stateManager)
 		{
 			ExecuteActions(stateManager, onState);
@@ -50,7 +55,7 @@ namespace SA
 
 				if (transitions[i].condition.HasMetCondition(stateManager))
 				{
-					if (transitions[i].targetState)
+					if (transitions[i].targetState != null)
 					{
 						// Set the new state
 						stateManager.currentState = transitions[i].targetState;
