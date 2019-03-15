@@ -17,6 +17,11 @@ namespace SA.BehaviourEditor
 		Rect mouseRect = new Rect(0, 0, 1, 1);
 		Rect all = new Rect(-5, -5, 10000, 10000);
 		GUIStyle style;
+		GUIStyle activeStyle;
+		Vector2 scrollPos;
+		static BehaviourEditor editor;
+		public static StateManager stateManager;
+		public static StateManager previousStateManager;
 
 		public enum UserActions
 		{
@@ -42,12 +47,25 @@ namespace SA.BehaviourEditor
 			// Load saved settings
 			settings = Resources.Load("EditorSettings") as EditorSettings;
 			style = settings.skin.GetStyle("window");
+			activeStyle = settings.activeSkin.GetStyle("window");
 		}
 		#endregion
 
 		#region GUI Methods
 		private void OnGUI()
 		{
+			// Switch to the StateManager of the currently selected object in the hierarchy
+			if (Selection.activeTransform != null)
+			{
+				stateManager = Selection.activeTransform.GetComponentInChildren<StateManager>();
+
+				if (previousStateManager != stateManager)
+				{
+					previousStateManager = stateManager;
+					Repaint();
+				}
+			}
+
 			Event e = Event.current;
 			mousePosition = e.mousePosition;
 
@@ -98,12 +116,36 @@ namespace SA.BehaviourEditor
 				// Draw node windows
 				for (int i = 0; i < settings.graph.windows.Count; i++)
 				{
+					/*
 					settings.graph.windows[i].windowRect = GUI.Window(
 						i,
 						settings.graph.windows[i].windowRect,
 						DrawNodeWindow,
 						settings.graph.windows[i].windowTitle
 					);
+					*/
+
+					BaseNode baseNode = settings.graph.windows[i];
+
+					if (baseNode.drawNode is StateNode)
+					{
+						// Draw differently if the window is selected
+						if (stateManager != null && baseNode.stateRef.currentState == stateManager.currentState)
+						{
+							baseNode.windowRect = GUI.Window(i, baseNode.windowRect,
+								DrawNodeWindow, baseNode.windowTitle, activeStyle);
+						}
+						else
+						{
+							baseNode.windowRect = GUI.Window(i, baseNode.windowRect,
+								DrawNodeWindow, baseNode.windowTitle);
+						}
+					}
+					else
+					{
+						baseNode.windowRect = GUI.Window(i, baseNode.windowRect,
+								DrawNodeWindow, baseNode.windowTitle);
+					}
 				}
 			}
 
