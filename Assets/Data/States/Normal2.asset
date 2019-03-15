@@ -17,6 +17,6 @@ MonoBehaviour:
   idCount: 2
   transitions:
   - id: 1
-    condition: {fileID: 11400000, guid: 1cc52f35eb51ec140b5beca8ccb61afe, type: 2}
+    condition: {fileID: 11400000, guid: 4c0672d1b9ec0c748916d9a1df73f2d3, type: 2}
     targetState: {fileID: 11400000, guid: f3f63620af7a1b0429b194eb3eb61ca5, type: 2}
     disable: 0

@@ -34,29 +34,6 @@ MonoBehaviour:
     transitionRef:
       previousCondition: {fileID: 0}
       transitionId: 0
-  - id: 1
-    drawNode: {fileID: 11400000, guid: bf6db2c63aebfb0408c70d3ebbab9be5, type: 2}
-    windowRect:
-      serializedVersion: 2
-      x: 457.5999
-      y: 209.00018
-      width: 200
-      height: 100
-    windowTitle: Condition
-    enterNode: 0
-    targetNode: 2
-    isDuplicate: 0
-    comment: 
-    isAssigned: 1
-    collapse: 0
-    previousCollapse: 0
-    stateRef:
-      currentState: {fileID: 0}
-      previousState: {fileID: 0}
-    transitionRef:
-      previousCondition: {fileID: 11400000, guid: f5f5419e30702704fbff48f43ecaa512,
-        type: 2}
-      transitionId: 0
   - id: 2
     drawNode: {fileID: 11400000, guid: b6daa738884e70f4ca2136e28b4bcf1b, type: 2}
     windowRect:
@@ -99,7 +76,7 @@ MonoBehaviour:
       currentState: {fileID: 0}
       previousState: {fileID: 0}
     transitionRef:
-      previousCondition: {fileID: 11400000, guid: 1cc52f35eb51ec140b5beca8ccb61afe,
+      previousCondition: {fileID: 11400000, guid: 4c0672d1b9ec0c748916d9a1df73f2d3,
         type: 2}
       transitionId: 1
   - id: 5
@@ -184,7 +161,10 @@ MonoBehaviour:
     isDuplicate: 0
     comment: 'Right click to add stuff.
 
-      Hold middle mouse to move around.'
+      Hold middle mouse to move around.
+
+
+      The graph can be edited in play mode.'
     isAssigned: 0
     collapse: 0
     previousCollapse: 0
@@ -194,4 +174,27 @@ MonoBehaviour:
     transitionRef:
       previousCondition: {fileID: 0}
       transitionId: 0
-  idCount: 9
+  - id: 12
+    drawNode: {fileID: 11400000, guid: bf6db2c63aebfb0408c70d3ebbab9be5, type: 2}
+    windowRect:
+      serializedVersion: 2
+      x: 399
+      y: 270
+      width: 200
+      height: 100
+    windowTitle: Condition
+    enterNode: 0
+    targetNode: 2
+    isDuplicate: 0
+    comment: 
+    isAssigned: 1
+    collapse: 0
+    previousCollapse: 0
+    stateRef:
+      currentState: {fileID: 0}
+      previousState: {fileID: 0}
+    transitionRef:
+      previousCondition: {fileID: 11400000, guid: 70fe4fc6e8168a748a8b6cda29dfc7a4,
+        type: 2}
+      transitionId: 3
+  idCount: 13

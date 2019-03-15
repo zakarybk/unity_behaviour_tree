@@ -53,7 +53,7 @@ namespace SA
 				if (transitions[i].disable)
 					continue;
 
-				if (transitions[i].condition.HasMetCondition(stateManager))
+				if (transitions[i].condition != null && transitions[i].condition.HasMetCondition(stateManager))
 				{
 					if (transitions[i].targetState != null)
 					{
