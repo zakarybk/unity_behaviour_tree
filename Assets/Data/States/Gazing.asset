@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2490b1f75dc11d46b141341ab151206, type: 3}
+  m_Name: Gazing
+  m_EditorClassIdentifier: 
+  onState:
+  - {fileID: 11400000, guid: ac6850d2074f0074eaa0ce7f1b9c6ac1, type: 2}
+  - {fileID: 11400000, guid: aaefe2456a42a04459aad4c724792155, type: 2}
+  onEnter:
+  - {fileID: 11400000, guid: d08e1305959260041b568a9397f2a632, type: 2}
+  - {fileID: 11400000, guid: 629b4e0d57acb4840a716196b7864dca, type: 2}
+  onExit: []
+  idCount: 3
+  transitions:
+  - id: 0
+    condition: {fileID: 11400000, guid: 3d9a6b53cb8318e4d9ba152bfce97ec2, type: 2}
+    targetState: {fileID: 11400000, guid: bd8da96d93949d0499f0497ae81a123e, type: 2}
+    disable: 0
+  - id: 1
+    condition: {fileID: 11400000, guid: dd03fca0c1580bc448d61f2accc32dad, type: 2}
+    targetState: {fileID: 11400000, guid: a28e6a2051230c34eb6bd71a0e3db8f6, type: 2}
+    disable: 0
+  - id: 2
+    condition: {fileID: 11400000, guid: 20221b5d9cc26b34b86f31b3848a911d, type: 2}
+    targetState: {fileID: 11400000, guid: 7b08198432be3644292beaf4a017e504, type: 2}
+    disable: 0

@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2490b1f75dc11d46b141341ab151206, type: 3}
+  m_Name: Idle
+  m_EditorClassIdentifier: 
+  onState:
+  - {fileID: 11400000, guid: aaefe2456a42a04459aad4c724792155, type: 2}
+  onEnter:
+  - {fileID: 11400000, guid: 605b6705d81c4614db39530d0311efac, type: 2}
+  - {fileID: 11400000, guid: d08e1305959260041b568a9397f2a632, type: 2}
+  - {fileID: 11400000, guid: 629b4e0d57acb4840a716196b7864dca, type: 2}
+  onExit: []
+  idCount: 9
+  transitions:
+  - id: 5
+    condition: {fileID: 11400000, guid: dd03fca0c1580bc448d61f2accc32dad, type: 2}
+    targetState: {fileID: 11400000, guid: a28e6a2051230c34eb6bd71a0e3db8f6, type: 2}
+    disable: 0
+  - id: 8
+    condition: {fileID: 11400000, guid: 20221b5d9cc26b34b86f31b3848a911d, type: 2}
+    targetState: {fileID: 11400000, guid: 7b08198432be3644292beaf4a017e504, type: 2}
+    disable: 0
+  - id: 6
+    condition: {fileID: 11400000, guid: e93bb7f779cf82a4daa3e29e962fdcbb, type: 2}
+    targetState: {fileID: 11400000, guid: c275be46acb432a4bbdb687086eebe47, type: 2}
+    disable: 0

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 2c64fc53bde1a8f43ad1693004c670c0
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - graph: {fileID: 11400000, guid: 21ca5944931fa7740934f9c191daf6b3, type: 2}
+  - stateNode: {instanceID: 0}
+  - transitionNode: {instanceID: 0}
+  - commentNode: {fileID: 11400000, guid: 6ec8e021d304d8140a17ba9096e45486, type: 2}
+  - skin: {fileID: 11400000, guid: b43e5c65a9827e34985075c4e05f3401, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

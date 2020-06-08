@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2490b1f75dc11d46b141341ab151206, type: 3}
+  m_Name: ExitGaze
+  m_EditorClassIdentifier: 
+  onState: []
+  onEnter: []
+  onExit: []
+  idCount: 2
+  transitions:
+  - id: 0
+    condition: {fileID: 11400000, guid: 2f3e235fff4dbd549b85d6ac53e5002b, type: 2}
+    targetState: {fileID: 11400000, guid: 153a41452d71f734894125a54278bb7c, type: 2}
+    disable: 0
+  - id: 1
+    condition: {fileID: 11400000, guid: a04ba8ec572e07d4495273e7328fe97b, type: 2}
+    targetState: {fileID: 11400000, guid: fe7e6514a6c93ff439f1d94d09895e70, type: 2}
+    disable: 0
