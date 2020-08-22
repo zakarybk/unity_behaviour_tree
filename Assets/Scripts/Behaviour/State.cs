@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SA
+namespace Behaviour
 {
 	[CreateAssetMenu(menuName = "Behaviour/State")]
 	public class State : ScriptableObject

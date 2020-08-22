@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SA
+namespace Behaviour
 {
 	[CreateAssetMenu(menuName = "Behaviour/Actions/Test/Add Health")]
 	public class ChangeHealth : StateActions
 	{
 		public override void Execute(StateManager states)
 		{
-			states.health += 10;
+			//states.health += 10;
 		}
 
 	}

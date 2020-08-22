@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SA.BehaviourEditor
+namespace Behaviour.BehaviourEditor
 {
 	[CreateAssetMenu(menuName = "Behaviour/Editor/Nodes/Comment Node")]
 	public class CommentNode : DrawNode

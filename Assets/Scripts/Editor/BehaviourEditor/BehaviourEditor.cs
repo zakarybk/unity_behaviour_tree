@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor; // Editor specifics
 
-namespace SA.BehaviourEditor
+namespace Behaviour.BehaviourEditor
 {
 	public class BehaviourEditor : EditorWindow
 	{

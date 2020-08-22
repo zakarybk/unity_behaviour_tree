@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using SA;
+using Behaviour;
 
-namespace SA.BehaviourEditor
+namespace Behaviour.BehaviourEditor
 {
 	[CreateAssetMenu(menuName = "Behaviour/Editor/Nodes/Transition Node")]
 	public class TransitionNode : DrawNode

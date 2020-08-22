@@ -6,9 +6,9 @@ using UnityEditor;
 using UnityEditorInternal;
 using System;
 using System.IO;
-using SA;
+using Behaviour;
 
-namespace SA.BehaviourEditor
+namespace Behaviour.BehaviourEditor
 {
 	[CreateAssetMenu(menuName = "Behaviour/Editor/Nodes/State Node")]
 	public class StateNode : DrawNode

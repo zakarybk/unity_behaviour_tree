@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SA
+namespace Behaviour
 {
 	public abstract class Condition : ScriptableObject
 	{

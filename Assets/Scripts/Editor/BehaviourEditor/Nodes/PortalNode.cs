@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace SA.BehaviourEditor
+namespace Behaviour.BehaviourEditor
 {
 	[CreateAssetMenu(menuName = "Behaviour/Editor/Nodes/Portal Node")]
 	public class PortalNode : DrawNode

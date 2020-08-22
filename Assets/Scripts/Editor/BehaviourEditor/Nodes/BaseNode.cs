@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace SA.BehaviourEditor
+namespace Behaviour.BehaviourEditor
 {
 	[System.Serializable]
 	public class BaseNode

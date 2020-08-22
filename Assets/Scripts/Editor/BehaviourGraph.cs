@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using SA.BehaviourEditor;
+using Behaviour.BehaviourEditor;
 
-namespace SA
+namespace Behaviour
 {
 	[CreateAssetMenu(menuName = "Behaviour/BehaviourGraph")]
 	public class BehaviourGraph : ScriptableObject
@@ -47,8 +47,12 @@ namespace SA
 				if (windows[i].id == baseNode.id)
 					continue;
 
-				if (windows[i].stateRef.currentState == baseNode.stateRef.currentState && !windows[i].isDuplicate)
-					return true;
+				// Only care about duplicates of state nodes
+				if (windows[i].drawNode is StateNode)
+				{
+					if (windows[i].stateRef.currentState == baseNode.stateRef.currentState && !windows[i].isDuplicate)
+						return true;
+				}
 			}
 
 			return false;

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
-using SA;
+using Behaviour;
 
-namespace SA.BehaviourCustomUI
+namespace Behaviour.BehaviourCustomUI
 {
 	[CustomEditor(typeof(State))]
 	public class StateGUI : Editor

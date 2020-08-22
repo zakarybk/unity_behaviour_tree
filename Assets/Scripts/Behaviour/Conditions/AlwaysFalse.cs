@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SA
+namespace Behaviour
 {
 	[CreateAssetMenu(menuName = "Behaviour/Conditions/Always False")]
 	public class AlwaysFalse : Condition
